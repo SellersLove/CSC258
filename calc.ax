@@ -142,7 +142,10 @@ isfractional: LDA input    	load input
 	 FLM magn1
 	 STA fraction
 	 BUN loadInput		bunch to read next input
-isDot: LDA true
+isDot: LDA checkFrac
+	 XOR true
+	 BZE loadInput
+	 LDA true
 	 STA executable
 	 LDA input
 	 OUT opsys		print '.'
