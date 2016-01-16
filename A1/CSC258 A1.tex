@@ -1,0 +1,269 @@
+\documentclass{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}  
+\usepackage{setspace}
+\usepackage{ mathrsfs }
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes.gates.logic.US,shapes.gates.logic.IEC,calc}
+\usepackage{array}
+\usepackage{circuitikz}
+\usepackage{longtable}
+\usetikzlibrary{arrows, shapes, backgrounds,fit}
+\usepackage{tkz-graph}
+\onehalfspacing
+\tikzstyle{branch}=[fill,shape=circle,minimum size=3pt,inner sep=0pt]
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+
+\begin{document}
+\
+\\
+{\large $CSC258$}
+\hfill{\large Rui Ji} \\
+\null\hfill{\large $1000340918$}\\
+\begin{center} 
+\section*{\centering {Problem Set 1}}
+\end{center}
+\begin{enumerate}
+\item if $x$ then $y$ else $z$ $\iff$ $(\neg x \vee y) \wedge (x \vee z)$ \\
+	if $y$ then $z \vee x$ else $z>x$  $\iff$ $(\neg y \vee z \vee x) \wedge (y \vee (z \geq x))$\\
+	if $z$ then $x \leq y$ else $x \wedge y$ $\iff$ $(\neg z \vee (x \leq y) \wedge (z \vee(x \wedge y)))$\\
+Proof by truth table:
+ \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.1in}|>{\tiny}p{1.0in}|>{\tiny} p{1.0in}|>{\tiny}p{1.0in}|>{\tiny} p{0.1in}}
+\hline
+$x$&$y$&$z$&if $x$ then $y$ else $z$&if $y$ then $z \vee x$ else $z>x$ & if $z$ then $x \leq y$ else $x \wedge y$\\[0.1in]\hline
+$F$&$F$&$F$&$F$&$F$&$F$\\[0.1in] \hline
+$F$&$F$&$T$&$T$&$T$&$T$\\[0.1in] \hline
+$F$&$T$&$F$&$F$&$F$&$F$\\[0.1in] \hline
+$F$&$T$&$T$&$T$&$T$&$T$\\[0.1in] \hline
+$T$&$F$&$F$&$F$&$F$&$F$\\[0.1in] \hline
+$T$&$F$&$T$&$F$&$F$&$F$\\[0.1in] \hline
+$T$&$T$&$F$&$T$&$T$&$T$\\[0.1in] \hline
+$T$&$T$&$T$&$T$&$T$&$T$\\[0.1in] \hline
+\end{longtable}
+Clearly, those three expressions are equivalent.\\ 
+\
+\qed
+\item First from the  circuit we get: $(a \wedge \neg ( (b \wedge c) \vee ( \neg b \wedge c) ) \ )\vee \neg ((a \wedge c) \vee (\neg a \wedge \neg c))\vee(\neg a  \wedge c)$\\
+	$(b \wedge c) \vee ( \neg b \wedge c) \iff c$, then we have $(a \wedge \neg c \ )\vee \neg ((a \wedge c) \vee (\neg a \wedge \neg c))\vee(\neg a  \wedge c)$\\
+	$(a \wedge c) \vee (\neg a \wedge \neg c) \iff a =c$, then we have $(a \wedge \neg c \ )\vee \neg (a = c)\vee(\neg a  \wedge c)$\\
+	$(a \wedge \neg c \ )\vee (\neg a  \wedge c) \iff a \oplus c$, also  $\neg (a = c) \iff a \oplus c$; hence, we have $(a \oplus c ) \vee (a \oplus c) \iff a \oplus c$\\
+	
+	\begin{center}
+	\begin{circuitikz} \draw
+	(0,2) node (node1) {a}
+	(0,0) node(node2) {c}
+	(2,1) node[xor port] (xor) {}
+	(node1.out) -- (xor.in 1)
+	(node2.out) -- (xor.in 2);
+	\draw (xor.output) -- ([xshift=0.5cm]xor.output) node[above] {$output$};
+	\end{circuitikz}
+	\end{center}
+\qed
+\item First we know set $\{ \neg, \vee \}$ is complete, so in order to prove $\{\bigtriangleup \}$ we can use $\bigtriangleup$  the express $\neg$ and $\vee$.\\
+	\begin{enumerate}
+	\item $\neg a$,  $\neg a \iff a\bigtriangleup a$, clearly if $a$ is true the $a\bigtriangleup a$ is false and true when $a$ is false.
+	\item $a \vee b$, we know that $a \vee b \iff \neg(\neg a \wedge \neg b) \iff (\neg a \bigtriangleup \neg b)$. Then, we have $a \vee b \iff ((a\bigtriangleup a) \bigtriangleup (b\bigtriangleup b))$.
+	\item Hence, $\{\bigtriangleup \}$  is complete.
+	\end{enumerate}
+\qed
+\item Suppose that $\{  \neq \}$ is complete. Then we know that using $\neq$ and two variables $a,b$ we could generate all 16 numbers from 0 to 15 in binary, which in other words stands for all possible combination of $F,T$ of length 4. \\
+First, from $a \neq a$ we always get false.\\
+Now, suppose we have two variables $a$ and $b$ and we can get a new combination $c: a\neq b$\\
+ \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.5in}|>{\tiny}p{1.0in}|>{\tiny} p{1.0in}|>{\tiny}p{1.0in}}
+\hline
+$a$&$b$&$a \neq b $ \\[0.1in]\hline
+$0$&$0$&$0$\\[0.1in] \hline
+$0$&$1$&$1$\\[0.1in] \hline
+$1$&$0$&$1$\\[0.1in] \hline
+$1$&$1$&$0$\\[0.1in] \hline
+\end{longtable}
+now from $a\neq c$ we have:
+ \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.5in}|>{\tiny}p{1.0in}|>{\tiny} p{1.0in}|>{\tiny}p{1.0in}}
+\hline
+$a$&$c$&$a \neq c $ \\[0.1in]\hline
+$0$&$0$&$0$\\[0.1in] \hline
+$0$&$1$&$1$\\[0.1in] \hline
+$1$&$1$&$0$\\[0.1in] \hline
+$1$&$0$&$1$\\[0.1in] \hline
+\end{longtable}
+clearly, that we can see $b$ has the same sequence as $ a \neq c$. Also, from $c \neq b$, we have:\\
+ \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.5in}|>{\tiny}p{1.0in}|>{\tiny} p{1.0in}|>{\tiny}p{1.0in}}
+\hline
+$b$&$c$&$b \neq c $ \\[0.1in]\hline
+$0$&$0$&$0$\\[0.1in] \hline
+$1$&$1$&$0$\\[0.1in] \hline
+$0$&$1$&$1$\\[0.1in] \hline
+$1$&$0$&$1$\\[0.1in] \hline
+\end{longtable}
+Hence, $a$ has the same sequence as  $b \neq c $.
+Also, from $(a \neq F) $,  $(b \neq F)$ and $(c \neq F) $, we have:\\
+ \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny} p{0.3in}|>{\tiny}p{0.3in}
+ |>{\tiny}p{0.3in}|}
+\hline
+$a$&$b$&$c$&$F$&$a\neq F$&$b\neq F$&$c\neq F$\\[0.1in]\hline
+$0$&$0$&$0$&$0$&0&0&0\\[0.1in] \hline
+$0$&$1$&$1$&$0$&0&1&1\\[0.1in] \hline
+$1$&$0$&$1$&$0$&1&0&1\\[0.1in] \hline
+$1$&$1$&$0$&$0$&1&1&0\\[0.1in] \hline
+\end{longtable}
+Clearly, no new string has been generated.\\
+ We now run out of strings and we only have 4 combinations $\{F, a, b,c\}$. Since, $\neq$ cannot generate all possible values between 0 and 15 in binary; therefore, it's incomplete. \\
+ \qed
+\item First we give the truth table
+ \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}}
+\hline
+$x_3$&$x_2$&$x_1$&$x_0$ & $x$&$y$&$z$&$y_3$&$y_2$&$y_1$&$y_0$&$z_1$&$z_0$\\[0.1in]\hline
+0&0&0&0&0&0&0&0&0&0&0&0&0\\[0.1in]\hline
+0&0&0&0&1&1&1&0&0&0&1&0&1\\[0.1in]\hline
+0&0&1&0&2&2&1&0&0&1&0&0&1\\[0.1in]\hline
+0&0&1&1&3&3&1&0&0&1&1&0&1\\[0.1in]\hline
+0&1&0&0&4&2&2&0&0&1&0&1&0\\[0.1in]\hline   
+0&1&0&1&5&5&1&0&1&0&1&0&1\\[0.1in]\hline
+0&1&1&0&6&3&2&0&0&1&1&1&0\\[0.1in]\hline
+0&1&1&1&7&7&1&0&1&1&1&0&1\\[0.1in]\hline
+1&0&0&0&8&4&2&0&1&0&0&1&0\\[0.1in]\hline
+1&0&0&1&9&3&3&0&0&1&1&1&1\\[0.1in]\hline
+1&0&1&0&10&5&2&0&1&0&1&1&0\\[0.1in]\hline
+1&0&1&1&11&11&1&1&0&1&1&0&1\\[0.1in]\hline
+1&1&0&0&12&4&3&0&1&0&0&1&1\\[0.1in]\hline
+1&1&0&1&13&13&1&1&1&0&1&0&1\\[0.1in]\hline
+1&1&1&0&14&7&2&0&1&1&1&1&0\\[0.1in]\hline
+1&1&1&1&15&5&3&0&1&0&1&1&1\\[0.1in]\hline
+\end{longtable}
+Notice, from the truth table we could get,\\
+$y_3 = x_3 \wedge x_0 \wedge (x_2 \neq x_1)$\\
+$y_2 = (x_3 \wedge \bar x_0) \vee(x_2 \wedge x_0)$\\
+$y_1 = (\bar x_3 \wedge x_1) \vee (x_3 \wedge \bar x_2 \wedge x_0 ) \vee (\bar x_0 \wedge x_2 \wedge (x_3 = x_1))$\\
+$y_0 = \neg ((\bar x_1 \wedge x_0) \vee (\bar x_3 \wedge \bar x_2 \wedge x_1 \wedge \bar x_0))$\\
+\indent $ \ \  \ = (x_1 \vee x_0) \wedge (x_3 \vee x_2 \vee \bar x_1 \vee x_0)$ \\ 
+\indent $\ \  \  = ((x_3 \vee x_2) \wedge x_1) \vee x_0$\\
+$z_1 = (\bar x_0 \wedge (x_2 \vee x_3)) \vee (x_3 \wedge (x_2 = x_1 ))$\\
+$z_0 = x_0 \vee \bar x_0((\bar x_3 \wedge \bar x_2 \wedge x_1) \vee (x_3 \wedge x_2 \wedge \bar x_1))$\\
+\indent $ \ \  \ = ((x_3=x_2 = \bar x_1) \wedge x_0) \vee x_0$ \\ 
+\indent $\ \  \  = (x_3=x_2 = \bar x_1) \vee x_0)$\\
+
+\begin{center}
+\begin{tikzpicture}[label distance=2mm]
+	
+    	\node (x3) at (0,0) {$x_3$};
+    	\node (x2) at (1,0) {$x_2$};
+    	\node (x1) at (2,0) {$x_1$};
+   	\node (x0) at (3,0) {$x_0$};
+	% x3
+ 	\node[and gate US, draw, logic gate inputs=nnn] at ($(x0)+(2,-2)$) (And1) {};
+	\node[xor gate US, draw, logic gate inputs=nn] at ($(And1)+(-1,-0.5)$) (Xor1) {};
+	%x2
+	\node[not gate US, draw, logic gate] at ($(And1)+(-1,-1.7)$) (Not0) {};
+	\node[and gate US, draw, logic gate inputs=nn] at ($(And1)+(0,-1.5)$) (And20) {};
+	\node[and gate US, draw, logic gate inputs=nn] at ($(And1)+(0,-2.5)$) (And21) {};
+	\node[or gate US, draw, logic gate inputs=nnnn] at ($(And1)+(1.5,-2)$) (Or2) {};
+	%x1
+	\node[not gate US, draw, logic gate] at ($(And1)+(-1,-3.3)$) (Not1) {};
+	\node[and gate US, draw, logic gate inputs=nn] at ($(And1)+(0,-3.5)$) (And3) {};
+	\node[not gate US, draw, logic gate] at ($(And1)+(-1,-4.5)$) (Not2) {};
+	\node[and gate US, draw, logic gate inputs=nnnnn] at ($(And1)+(0,-4.5)$) (And4) {};
+	\node[not gate US, draw, logic gate] at ($(And1)+(-1,-5.3)$) (Not3) {};
+	\node[and gate US, draw, logic gate inputs=nn] at ($(And1)+(0,-5.5)$) (And5) {};
+	\node[xnor gate US, draw, logic gate inputs=nn] at ($(And1)+(0,-6.5)$) (Xnor1) {};
+	\node[and gate US, draw, logic gate inputs=nnnn] at ($(And1)+(1.5,-6)$) (And6) {};	
+	\node[or gate US, draw, logic gate inputs=nnnnn] at ($(And1)+(3,-4.2)$) (Or3) {};
+
+	%x0
+	\node[or gate US, draw, logic gate inputs=nn] at ($(And1)+(-1,-7.7)$) (Or40) {};
+	\node[and gate US, draw, logic gate inputs=nnn] at ($(And1)+(0.2,-8.2)$) (And7) {};
+	\node[or gate US, draw, logic gate inputs=nnn] at ($(And1)+(1.5,-8.5)$) (Or41) {};
+	
+	%z1
+	\node[or gate US, draw, logic gate inputs=nn] at ($(And1)+(-1,-10.5)$) (Or50) {};
+	\node[xnor gate US, draw, logic gate inputs=nn] at ($(And1)+(-1,-11.2)$) (Xnor2) {};
+	\node[not gate US, draw, logic gate] at ($(And1)+(-1,-9.5)$) (Not4) {};
+	\node[and gate US, draw, logic gate inputs=nnn] at ($(And1)+(0,-10)$) (And8) {};
+	\node[and gate US, draw, logic gate inputs=nnn] at ($(And1)+(0,-11.5)$) (And9) {};
+	\node[or gate US, draw, logic gate inputs=nnnnn] at ($(And1)+(2,-10.5)$) (Or51) {};		
+
+	%z0
+	\node[xnor gate US, draw, logic gate inputs=nnn] at ($(And1)+(0.2,-12.75)$) (Xnor3) {};
+	\node[not gate US, draw, logic gate inputs=nn] at ($(And1)+(-1,-12.65)$) (Not5) {};
+	\node[xnor gate US, draw, logic gate inputs=nnn] at ($(And1)+(1.2,-13.0)$) (Xnor4) {};
+	\node[or gate US, draw, logic gate inputs=nnnn] at ($(And1)+(2.5,-13.5)$) (Or61) {};
+	% y3	
+	\draw (x3) |- (And1.input 1);
+	\draw (x0) |- (And1.input 2);
+	\draw (x2) |- (Xor1.input 1);
+	\draw (x1) |- (Xor1.input 2);
+	\draw (Xor1.output) |- (And1.input 3);
+	\draw (And1.output) -- ([xshift=0.5cm]And1.output) node[above] {$y_3$};
+	%y2
+	\draw (x3) |- (And20.input 1);
+	\draw (x0) |- (Not0.input);
+	\draw (Not0.output) |- (And20.input 2);
+	\draw (x2) |- (And21.input 1);
+	\draw (x0) |- (And21.input 2);
+	\draw (And20.output) |- (Or2.input 1);
+	\draw (And21.output) |- (Or2.input 4);
+	\draw (Or2.output) -- ([xshift=0.5cm]Or2.output) node[above] {$y_2$};
+	%y1
+	\draw (x3) |- (Not1.input);
+	\draw (Not1.output) |- (And3.input 1);
+	\draw (x1) |- (And3.input 2);
+	
+	\draw (x3) |- (And4.input 1);	
+	\draw (x2) |- (Not2.input);
+	\draw (Not2.output) |- (And4.input 3);
+	\draw (x0) |- (And4.input 5);
+	
+	\draw (x2) |- (And5.input 2);	
+	\draw (x0) |- (Not3.input);
+	\draw (Not3.output) |- (And5.input 1);
+	
+	\draw (x3) |- (Xnor1.input 1);
+	\draw (x1) |- (Xnor1.input 2);
+	\draw (And5.output) |- (And6.input 1);
+	\draw (Xnor1.output) |- (And6.input 4);
+	
+	\draw (And3.output) |- (Or3.input 1);
+	\draw (And4.output) |- (Or3.input 3);
+	\draw (And6.output) |- (Or3.input 5);
+	\draw (Or3.output) -- ([xshift=0.5cm]Or3.output) node[above] {$y_1$};
+	%y0
+	\draw (x2) |- (Or40.input 1);
+	\draw (x3) |- (Or40.input 2);
+	\draw (Or40.output) |- (And7.input 1);
+	\draw (x1) |- (And7.input 2);
+	\draw (And7.output) |- (Or41.input 1);
+	\draw (x0) |- (Or41.input 3);
+	\draw (Or41.output) -- ([xshift=0.5cm]Or41.output) node[above] {$y_0$};
+	
+	%z1
+	\draw (x0) |- (Not4.input);
+	\draw (Not4.output) |- (And8.input 1);
+	\draw (x3) |- (Or50.input 2);	
+	\draw (x2) |- (Or50.input 1);
+	\draw (Or50.output) |- (And8.input 3);
+	\draw (x2) |- (Xnor2.input 2);	
+	\draw (x1) |- (Xnor2.input 1);	
+	\draw (Xnor2.output) |- (And9.input 1);
+	\draw (x3) |- (And9.input 3);
+	\draw (And8.output) |- (Or51.input 1);
+	\draw (And9.output) |- (Or51.input 5);
+	\draw (Or51.output) -- ([xshift=0.5cm]Or51.output) node[above] {$z_1$};
+	
+	%z0
+
+	\draw (x1) |- (Not5.input);
+	\draw (Not5.output) |- (Xnor3.input 1);
+	\draw (x2) |- (Xnor3.input 2);
+	\draw (Xnor3.output) |- (Xnor4.input 1);
+	\draw (x3) |- (Xnor4.input 2);
+	\draw (Xnor4.output) |- (Or61.input 1);
+	\draw (x0) |- (Or61.input 4);
+	\draw (Or61.output) -- ([xshift=0.5cm]Or61.output) node[above] {$z_0$};
+\end{tikzpicture}
+\end{center}
+\qed
+\end{enumerate}
+\end {document}

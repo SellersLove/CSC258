@@ -1,0 +1,339 @@
+\RequirePackage[l2tabu,orthodox]{nag}  % warn about common LaTeX pitfalls
+\RequirePackage[ascii]{inputenc}  % input is 7-bit ASCII
+\RequirePackage{fixltx2e}  % fix LaTeX2e kernel bugs
+
+\documentclass[11pt,twoside]{article}
+\usepackage{color}
+\usepackage{graphicx}
+\graphicspath{ {image/} }
+\usepackage{calc}  % arithmetic in length parameters
+\usepackage{enumitem}  % more control over list formatting
+\usepackage{fancyhdr}  % simpler headers and footers
+\usepackage[margin=1in]{geometry}  % page layout
+\usepackage{lastpage}  % for last page number
+\usepackage{relsize}  % easier font size changes
+\usepackage[normalem]{ulem}  % smarter underlining
+\usepackage{url}  % verb-like typesetting of URLs
+\usepackage{xfrac}  % nicer looking simple fractions for text and math
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{tikz-timing}
+\usetikzlibrary{arrows, shapes, backgrounds,fit}
+\usepackage{tkz-graph}
+% Set up fonts.
+\usepackage[T1]{fontenc}  % use true 8-bit fonts
+\usepackage{slantsc}  % allow slanted small-caps
+\usepackage{microtype}  % perform various font optimizations
+% Use Palatino-based monospace instead of kpfonts' default.
+%\usepackage{newpxtext}
+\ttfamily
+\DeclareFontShape{T1}{\ttdefault}{m}{scsl}{<->ssub*\ttdefault/m/sc}{}
+\DeclareFontShape{T1}{\ttdefault}{b}{scsl}{<->ssub*\ttdefault/b/sc}{}
+% "Kepler" fonts.
+\usepackage[nott,notextcomp]{kpfonts}
+% Use curvier Latin Modern brackets instead of kpfonts' glyphs.
+\DeclareSymbolFont{lmsymb}     {OMS}{lmsy}{m}{n}
+\DeclareSymbolFont{lmlargesymb}{OMX}{lmex}{m}{n}
+\DeclareMathDelimiter{\rbrace}{\mathclose}{lmsymb}{"67}{lmlargesymb}{"09}
+\DeclareMathDelimiter{\lbrace}{\mathopen}{lmsymb}{"66}{lmlargesymb}{"08}
+
+% Page layout: stretch text to fill up page.
+\addtolength\footskip{.25\headheight}
+\flushbottom
+
+% Common list settings.
+
+% Common macros.
+\input{macros-263}
+\newcommand*\st{\mathrel{|}}  % "such that" for set extension
+
+% Headings.
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\lhead{CSC\,258\,H1}
+\chead{\large\scshape Assignment \#\,2}
+\rhead{\scshape Fall 2015}
+\lfoot{\scshape Dept.\@ of Computer Science, University of Toronto,
+       St.~George Campus}
+\cfoot{}
+\rfoot{\scshape page \thepage\space of \pageref{LastPage}}
+
+
+\begin{document}
+
+\begin{enumerate}[leftmargin=0pt]
+% question 1 
+\item 
+	\begin{enumerate}
+	% part (a)
+	\item 
+		$a = \bot$ and $b = \bot$,
+		\begin{itemize}[label = {}]
+		\item Set $x = \bot$ and $y = \bot$, the output is still $x = \bot$ and $y = \bot$; 
+		hence, the circuit stays stable.
+ 		\item  Set $x = \bot$ and $y = \top$, then the output chnage to $x = \bot$ and $y = \bot$;
+		hence, unstable.
+		\item Set $x = \top$ and $y = \bot$, then the output changes to $x = \top$ and $y = \top$; 
+		hence, unstable.
+		\item Set $x = \top$ and $y = \top$, the output is still $x = \top$ and $y = \top$; 
+		hence, the circuit stays stable.
+		\end{itemize}
+	The stable states are $(a,b,x,y) = (\bot, \bot, \bot, \bot)$ or $(a,b,x,y) = (\bot, \bot, \top, \top)$. 
+	%part (b)
+	\item 
+		For stable state $(a,b,x,y) = (\bot, \bot, \bot, \bot)$, when you apply a pulse,
+		\begin{enumerate}
+		\item apply pulse to $a$:
+			\[\begin{tikztimingtable} 
+			 a	& 10L 10H 10L \\
+			 b	& 30L \\
+			 x 	& 30L\\
+			 y 	&30L\\
+			\end{tikztimingtable} \]
+		\item apply pulse to $b$:
+			\[\begin{tikztimingtable} 
+			 a	& 30L \\
+			 b	& 10L 10H 10L \\
+			 x 	& 10L 10H 10L \\
+			 y 	& 10L 10H 10L \\
+			\end{tikztimingtable} \]
+		\item apply pulse to both $a$ and $b$:
+			\begin{itemize}[label = {}]
+			\item if $a$ happens first:
+                			\[\begin{tikztimingtable} 
+                			 a	& 10L 10H 10L \\
+                			 b	& 12L 10H 8L \\
+                			 x 	& 20L 10H\\
+                			 y 	& 12L 18H \\
+                			\end{tikztimingtable} \] 
+			 \item if $b$ happens first:
+			        \[\begin{tikztimingtable} 
+                			 a	& 10L 10H 10L \\
+                			 b	& 8L 10H 12L \\
+                			 x 	& 8L 2H 20L\\
+                			 y 	& 8L 10H 12L\\
+                			\end{tikztimingtable} \] 
+			\item if $a$ and $b$ happen at same time:
+			        \[\begin{tikztimingtable} 
+                			 a	& 10L 10H 10L \\
+                			 b	& 10L 10H 10L \\
+                			 x 	& 20L2H2L2H2L2H \\
+                			 y 	& 10L 10H 2H2L2H2L2H \\
+                			\end{tikztimingtable} \] 				
+			\end{itemize}
+		\end{enumerate}
+		For stable state $(a,b,x,y) = (\bot, \bot, \top, \top)$, when you apply a pulse,
+		\begin{enumerate}
+		\item apply pulse to $a$:
+			\[\begin{tikztimingtable} 
+			 a	& 10L 10H 10L \\
+			 b	& 30L \\
+			 x 	& 10H 20L\\
+			 y 	&10H 20L\\
+			\end{tikztimingtable} \]
+		\item apply pulse to $b$:
+			\[\begin{tikztimingtable} 
+			 a	& 30L \\
+			 b	& 10L 10H 10L \\
+			 x 	& 30H \\
+			 y 	& 30H \\
+			\end{tikztimingtable} \]
+		\item apply pulse to both $a$ and $b$:
+			\begin{itemize}[label = {}]
+			\item if $a$ happens first:
+                			\[\begin{tikztimingtable} 
+                			 a	& 10L 10H 10L \\
+                			 b	& 12L 10H 8L \\
+                			 x 	& 10H 10L 10H\\
+                			 y 	& 10H 2L 18H \\
+                			\end{tikztimingtable} \] 
+			 \item if $b$ happens first:
+			        \[\begin{tikztimingtable} 
+                			 a	& 10L 10H 10L \\
+                			 b	& 8L 10H 12L \\
+                			 x 	& 10L 20L\\
+                			 y 	& 18H 12L\\
+                			\end{tikztimingtable} \] 
+			\item if $a$ and $b$ happen at same time:
+			        \[\begin{tikztimingtable} 
+                			 a	& 10L 10H 10L \\
+                			 b	& 10L 10H 10L \\
+                			 x 	& 10H 10L 2H2L2H2L2H \\
+                			 y 	& 22H 2L2H2L2H \\
+                			\end{tikztimingtable} \] 				
+			\end{itemize}
+		\end{enumerate}
+	\end{enumerate}
+% question 2
+\item 
+	We know that the $JK latchs$
+        \begin{longtable}{|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}| >{\tiny}p{0.2in}|}
+        \hline
+       	J&K&Q\\[0.1in]\hline
+	$\bot$&$\bot$&$\triangleleft Q$\\[0.1in]\hline
+	$\bot$&$\top$&$\bot$\\[0.1in]\hline
+	$\top$&$\bot$&$\top$\\[0.1in]\hline
+	$\top$&$\top$&$-\triangleleft Q$\\[0.1in]\hline
+	\end{longtable} 
+	Also, it is clearly to see that: 
+	\[ J_A = -\triangleleft Q_C;  \ K_A = -\triangleleft Q_C\]
+	\[ J_B = \triangleleft Q_A;  \ K_B = \triangleleft Q_A\]
+	\[ J_C = \triangleleft Q_A \wedge \triangleleft Q_B;  \ K_C = \triangleleft Q_C\]
+	from the tables above we can easily come up with the diagram:
+			\[\begin{tikztimingtable} 
+                			 clock	& 2L 2H 2L 2H 2L 2H 2L 2H 2L 2H 2L 2H 2L 2H 2L 2H 2L\\
+                			 $Q_A$	& 6H 4L 4H 8L 4H 4L 4H \\
+                			 $Q_B$	& 2H 4L 8H 12L 8H  \\
+                			 $Q_C$ 	& 2H 12L 4H 16L  \\
+                		\end{tikztimingtable} \] 
+
+%question 3
+\item
+Here we show the circuit for $n=4$:
+		\[ \includegraphics[scale=0.5]{q3.png} \]
+%question 4
+\item 
+	\begin{enumerate}
+	\item
+		convert -42 to IEEE single-precision floating point.
+		\begin{itemize}[label = {}]
+		\item -42 in binary is $-101010$,
+		\[\begin{tabular}{c@{\,}c@{\,}c@{\,}c}
+  				& 4 &2  &  \\
+			        & 2& 1&  \ \ \ 0\\
+  				& 1 &0  & \ \ \ 1 \\
+			        &    &  5&  \ \ \ 0\\
+				&    &  2& \ \ \ 1 \\
+				&    &  1& \ \ \ 0 \\
+				&    &  0& \ \ \ 1 \\
+		\end{tabular}\]
+		 which is $-1.01010 \times 2^5 = -1.01010 \times 2^{132-127}$;
+		\item similarly we get 132 in binary is $10000100$;
+		\item IEEE single-precision standard: $[1 \ 10000100 \ 01010 00000 00000 00000 000]$.
+		\end{itemize}
+	\item 
+		convert 3.14 to IEEE single-precision floating point.
+		\begin{itemize}[label = {}]
+		\item 
+		\[\begin{tabular}{c@{\,}c@{\,}c@{\,}c}
+  				0.&  1&4  &  \\
+			        0.& 2& 8&  \ \ \ 0\\
+  				0.& 5&6  & \ \ \ 0\\
+				1.& 1&2  & \ \ \ 1 \\
+				 0.& 2& 4&  \ \ \ 0\\
+				  0.& 4& 8&  \ \ \ 0\\
+				   0.& 9& 6&  \ \ \ 0\\
+				  1.& 9& 2&  \ \ \ 1\\
+				  1.& 8& 4&  \ \ \ 1\\
+				  1.& 6& 8&  \ \ \ 1\\
+				  1.&3& 6&  \ \ \ 1\\
+				   0. &7& 2&  \ \ \ 0\\
+				 1. &4& 4&  \ \ \ 1\\
+				  0. &8& 8&  \ \ \ 0\\
+				  1. &7& 6&  \ \ \ 1\\
+				  1. &5& 2&  \ \ \ 1\\
+				 1. &0& 4&  \ \ \ 1\\
+				 0. &0& 8&  \ \ \ 0\\
+				 0. &1& 6&  \ \ \ 0\\
+				0. &3& 2&  \ \ \ 0\\
+				0. &6& 4&  \ \ \ 0\\
+				1. &2& 8&  \ \ \ 1\\
+					\end{tabular}\]
+		\item  $3$ in binary is $11$, and $0.14$ in binary is $0.0 \ \overline{01000111101011100001}$
+		\item $3.14$ in binary is $11.0 \ \overline{01000111101011100001} = 1.10 \ \overline{01000111101011100001} \times 2^1$;
+		\item normalize $314_2 = 1.10 \ \overline{01000111101011100001} \times 2^{128-127} $;
+		\item 128 in binary is $10000000$;
+		\item IEEE single-precision standard: $[0 \ 10000000 \ 10 01000 11110 10111 00001 0 ]$.
+		\end{itemize}
+	\end{enumerate}
+%question 5
+\item  convert $[0 \ 10000011 \ 01011 01011 01011 01011 010]$ from  IEEE single-precision floating-point to base ten.
+	\begin{itemize}[label = {}]
+	\item from the first bit $0$ we can see that the number is positive;
+	\item the next 8 bits $10000011$ stand for exponent which is $131$, then the exponent is $131-127 = 4$;
+	\item then the next stand for significant, which is $1.35483860$
+	\item the number is $1.35483860 \times 2^4 = 21.677$ with 5 significant digits.
+	\end{itemize}
+%question 6
+\item
+\begin{enumerate}
+\item In order to calculated $-\frac{5}{6}$, we first compute $\frac{1}{3}$, then $\frac{5}{3}$, then $\frac{5}{6}$ and finally $-\frac{5}{6}$
+\begin{itemize}[label = {}]
+	\item  compute $\frac{1}{3}$ is $1 \div 11 = 01'1$:
+		\[\begin{tabular}{c@{\,}c@{\,}c@{\,}c}
+  				&  &  & 1' \\
+			-       &  & 1 & 1 \\
+				\hline
+  				&  &\  1' &  \\
+			-       &  1  & 1 &  \\
+				\hline
+				1' &   0  &  &  \\
+		\end{tabular}\]
+	\item compute then $\frac{5}{3}$ is $01'1 \times 101 = 10'111$:
+			\[\begin{tabular}{c@{\,}c@{\,}c@{\,}c@{\,}c}
+  				&&  0&  \ 1'& 1 \\
+			+     01' &1& 1 &  &  \\
+				\hline
+  				&10'\ \ \ &  1&\   1& 1 \\
+			\end{tabular}\]
+	\item compute then $\frac{5}{6}$ by shifting the decimal point:
+					\[10'11.1\]
+	\item compute $\frac{-5}{6}$ by 2's complement:
+					\[01'00.1\]
+	
+	\end{itemize}
+\item We know that $7$ is binary is $111$; hence, int binary quote notation is $111$ as well.
+\item compute $01'00.1 -111 = 10'0 1101. 1$:
+			\[\begin{tabular}{c@{\,}c@{\,}c@{\,}c@{\,}c}
+		            -    &01'&  0& 0.& 1 \\
+		            	& 0'1 &  1&1&  \\
+				\hline
+  				10'0 & 11 &  0&1.&  1\\
+			\end{tabular}\]
+\item generate from the quote notation paper we have the formula: \\ 
+		 let
+		 \[x = 10\]
+		 \[y = 01101.1\]
+		 \[a = 1\]
+		 \[w = sequence \ of \ a's \ the \ same \ length\ as\  x\]
+		 \[z = digit \ 1\  followed\ by \ a \ sequence \ of\ zeros\ of\ the\ same\ length\ as\ y\]
+		then
+		\[(10'0 1101. 1)_{10} =y- \frac{xz}{w} = 01101.1 - \frac{10 \times 1 00000}{11}\]
+		\[ = 13\frac{1}{2} - \frac{64}{3}\]
+		\[ = \frac{81}{6} - \frac{128}{3} = -\frac{47}{6} = -7.8\bar3\]
+\end{enumerate}
+
+%question 7
+\item
+\begin{itemize}[label = {}]
+	\item First convert decimal ASII to binary, and we have:
+	\item $d$ in ASCII code is $100$ in decimal, then $1100100$ in binary;
+	\item $o$ in ASCII code is $111$ in decimal, then $1101111$  in binary;
+	\item $space$ in ASCII code is $32$ in decimal,then $0100000$  in binary;
+	\item $i$ in ASCII code is $105$ in decimal, then $1101001$  in binary;
+	\item $t$ in ASCII code is $116$ in decimal,then $1110100$  in binary;
+	\item Then using Hamming code to encode we have,
+        \begin{longtable}{|>{\tiny}p{0.3in}|>{\tiny} p{0.1in}| >{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny} p{0.1in}|>{\tiny}p{0.1in}
+        |>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}|>{\tiny}p{0.1in}}
+        \hline
+       $symbol$&$p_1$&$p_2$&$d_1$&$p_3$&$d_2$&$d_3$&$d_4$&$p_4$&$d_5$&$d_6$&$d_7$\\[0.1in]\hline
+	$b	     $&$1    $&$1    $&$1    $&$1    $&$1    $&$0    $&$0   $&$1    $&$1    $&$0    $&$0    $\\[0.1in]\hline
+	$o	     $&$1    $&$0    $&$1    $&$0    $&$1    $&$0    $&$1   $&$1    $&$1    $&$1    $&$1    $\\[0.1in]\hline
+	$space  $&$1    $&$0    $&$0    $&$1    $&$1    $&$0    $&$0   $&$0    $&$0    $&$0    $&$0    $\\[0.1in]\hline
+	$i	     $&$0    $&$1    $&$1    $&$0    $&$1    $&$0    $&$1   $&$1    $&$0    $&$0    $&$1    $\\[0.1in]\hline
+	$t	     $&$1    $&$0    $&$1    $&$0    $&$1    $&$1    $&$0   $&$1    $&$1    $&$0    $&$0    $\\[0.1in]\hline
+	\end{longtable}
+	\item 
+	\item If the third bit of third character is flipped. Then we will get ${10} 1 {1} 100 {0} 000$ for the third character.
+	\item We know that : 
+		\[c_1 = p_1d_1d_2d_4d_5d_7\]
+		\[c_2 = p_2d_1d_3d_4d_6d_7\]
+		\[c_3 = p_3d_2d_3d_4\]
+		\[c_4 = p_4d_5d_6d_7\]
+	\item Then, $c_1 = 1$, $c_2 = 1$, $c_3 = 0$ and $c_4 = 0$. Hence, we get $0011$, then we know the third bit is flipped.
+\end{itemize}
+\end{enumerate}
+
+\end{document}

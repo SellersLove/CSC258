@@ -1,0 +1,108 @@
+\RequirePackage[l2tabu,orthodox]{nag}  % warn about common LaTeX pitfalls
+\RequirePackage[ascii]{inputenc}  % input is 7-bit ASCII
+\RequirePackage{fixltx2e}  % fix LaTeX2e kernel bugs
+
+\documentclass[11pt,twoside]{article}
+\usepackage{color}
+\usepackage{graphicx}
+\graphicspath{ {image/} }
+\usepackage{calc}  % arithmetic in length parameters
+\usepackage{enumitem}  % more control over list formatting
+\usepackage{fancyhdr}  % simpler headers and footers
+\usepackage[margin=1in]{geometry}  % page layout
+\usepackage{lastpage}  % for last page number
+\usepackage{relsize}  % easier font size changes
+\usepackage[normalem]{ulem}  % smarter underlining
+\usepackage{url}  % verb-like typesetting of URLs
+\usepackage{xfrac}  % nicer looking simple fractions for text and math
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{tikz-timing}
+\usetikzlibrary{arrows, shapes, backgrounds,fit}
+\usepackage{tkz-graph}
+% Set up fonts.
+\usepackage[T1]{fontenc}  % use true 8-bit fonts
+\usepackage{slantsc}  % allow slanted small-caps
+\usepackage{microtype}  % perform various font optimizations
+% Use Palatino-based monospace instead of kpfonts' default.
+%\usepackage{newpxtext}
+\ttfamily
+\DeclareFontShape{T1}{\ttdefault}{m}{scsl}{<->ssub*\ttdefault/m/sc}{}
+\DeclareFontShape{T1}{\ttdefault}{b}{scsl}{<->ssub*\ttdefault/b/sc}{}
+% "Kepler" fonts.
+\usepackage[nott,notextcomp]{kpfonts}
+% Use curvier Latin Modern brackets instead of kpfonts' glyphs.
+\DeclareSymbolFont{lmsymb}     {OMS}{lmsy}{m}{n}
+\DeclareSymbolFont{lmlargesymb}{OMX}{lmex}{m}{n}
+\DeclareMathDelimiter{\rbrace}{\mathclose}{lmsymb}{"67}{lmlargesymb}{"09}
+\DeclareMathDelimiter{\lbrace}{\mathopen}{lmsymb}{"66}{lmlargesymb}{"08}
+
+% Page layout: stretch text to fill up page.
+\addtolength\footskip{.25\headheight}
+\flushbottom
+
+% Common list settings.
+
+% Common macros.
+\input{macros-263}
+\newcommand*\st{\mathrel{|}}  % "such that" for set extension
+
+% Headings.
+\pagestyle{fancy}
+\let\headrule\empty
+\let\footrule\empty
+\lhead{CSC\,258\,H1}
+\chead{\large\scshape Assignment \#\,3}
+\rhead{\scshape Fall 2015}
+\lfoot{\scshape Dept.\@ of Computer Science, University of Toronto,
+       St.~George Campus}
+\cfoot{}
+\rfoot{\scshape page \thepage\space of \pageref{LastPage}}
+
+
+\begin{document}
+
+\begin{enumerate}[leftmargin=0pt]
+
+\item The basic idea for the code, is first read the input character by character, then do the arithmetic, finally print the number with 4 digits precision. 
+\begin{itemize}[label={}]
+	\item When reading the input, we keep tracking whether the input is a operator (i.e \ $+-*/ .$) or a number.
+	\item If it is a number, then we track if it is the fractional part or integer part. In order to do so we create a boolean variable $fraction$. If we encounter a dot we set  $fraction$ to true (note: we use $1$ for true $-1$ for false).
+	We also have a boolean variable called negative in order to track whether the next operand is negative
+	or not. 
+	\item If the input is an operator $+ - */$, we check whether the previous input is a number or dot. If it is a number or a dot then all operators are valid and we do the corresponding operation. If it is not a number then only $-$ is valid, which means next operand is negative. Otherwise, ignore the input and brunch to read input.
+	\item If the input is $=$ then we check if the previous input is a number or dot. If it is then $=$ is a valid input, otherwise ignore the input and brunch to read input. After we received $=$ then the only valid input would be $esc$, and if the next input is $esc$, we brunch to print result otherwise, ignore and wait for the next input.
+	If we received a $esc$ input and the previous input is not $=$, then just ignore and wait for next input.
+	\item For printing part, we are basically using the idea from the course website for \proc{printint}, with a slight modification. For printing a floating number we just keep tracing the digits of the integer part and decimal position. 
+	\item After we print the result we brunch back to the beginning of the program and waiting for the next computation. 
+	
+\end{itemize}
+	\textcolor{red}{code and sample output are attached with more detailed comment}  
+	\[ \includegraphics[scale=0.35]{output.png} \]
+\item
+	\begin{enumerate}
+	%%(a)
+	\item BNT $m$
+		\begin{align} \nonumber
+                		AC\ \ \  &\rightarrow \ \ \ AL1\\ \nonumber
+                		one \ \ \ & \rightarrow \ \ \ AL2 \\ \nonumber
+                		IR \ \ \ & \rightarrow \ \ \ ALF\\ \nonumber
+                		ALU \ \ \ & \rightarrow \ \ \ AC\\ \nonumber
+                		IR \ \ \ & \rightarrow \ \ \ m0\\ \nonumber
+                		PC+1 \ \ \ &  \rightarrow \ \ \ m1\\ \nonumber
+                		AC \ \ \ & \rightarrow \ \ \ MS\\ \nonumber
+                		MUX \ \ \ & \rightarrow \ \ \ PC \nonumber
+		\end{align}
+	%% (b)
+	\item EXE $m$	
+		\begin{align} \nonumber
+                		IR\ \ \ &\rightarrow  \ \ \ MAR\\ \nonumber
+                		RAM \ \ \ &\rightarrow \ \ \ IR \nonumber
+		\end{align}
+	
+	\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
